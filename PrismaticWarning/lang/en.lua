@@ -1,0 +1,71 @@
+local strings = {
+  -- Alert --
+  
+  PRISMATICWARNING_ALERT = "Prismatic",
+  PRISMATICWARNING_SLOT_NOW = "Slot one now",
+  PRISMATICWARNING_KEEP_AS_IS = "Keep it as is",
+  PRISMATICWARNING_DESLOT_NOW = "Deslot it now",
+  PRISMATICWARNING_AUTO_SWAP_SUCCESS = "Successfully Auto-Swapped weapons",
+  PRISMATICWARNING_AUTO_SWAP_FAILED = "Failed to Auto-Swap weapons",
+  
+  -- Menu --
+  PRISMATICWARNING_MENU_OSA = "On-Screen Alert",
+  PRISMATICWARNING_MENU_HIDE_OSA = "Hide On-Screen Alert",
+  PRISMATICWARNING_MENU_HIDE_OSA_TT = "When selected, the on-screen alert will never display",
+  PRISMATICWARNING_MENU_SHOW_OSA = "Show On-Screen Alert Right Now",
+  PRISMATICWARNING_MENU_SHOW_OSA_TT = "When selected, the on-screen alert will pop up so you can reposition it and test other settings",
+  PRISMATICWARNING_MENU_OSA_IN_COMBAT = "Hide On-Screen Alert In Combat",
+  PRISMATICWARNING_MENU_OSA_IN_COMBAT_TT = "When selected, the on-screen alert will not display while in combat",
+  PRISMATICWARNING_MENU_LOCK_OSA = "Lock Alert Position",
+  PRISMATICWARNING_MENU_LOCK_OSA_TT = "When selected, you will be unable to move the alert",
+  PRISMATICWARNING_MENU_FONT = "Font Name",
+  PRISMATICWARNING_MENU_FONT_TT = "Font name for the alert",
+  PRISMATICWARNING_MENU_FONT_SIZE = "Alert Font Size",
+  PRISMATICWARNING_MENU_FONT_SIZE_TT = 'Font size for the word "Prismatic"',
+  PRISMATICWARNING_MENU_INFO_FONT_SIZE = "Info Font Size",
+  PRISMATICWARNING_MENU_INFO_FONT_SIZE_TT = 'Font Size for the text under the word "Prismatic", typically "SLOT NOW" or "DESLOT NOW"',
+  PRISMATICWARNING_MENU_OUTLINE = "Outline",
+  PRISMATICWARNING_MENU_OUTLINE_TT = "Font Outline to be used by the counter",
+  PRISMATICWARNING_MENU_COLOR = "On-Screen Alert Color",
+  PRISMATICWARNING_MENU_COLOR_TT = "Changes the color of the on-screen alert",
+  
+  PRISMATICWARNING_MENU_WHEN = "When to Alert",
+  PRISMATICWARNING_MENU_VET = "Alert Only On Veteran Difficulty",
+  PRISMATICWARNING_MENU_VET_TT = "When selected, you will only be alerted to slot and unslot a prismatic when on veteran difficulty",
+  PRISMATICWARNING_MENU_DUNGEONS = "Alert in Dungeons",
+  PRISMATICWARNING_MENU_DUNGEONS_TT = "When selected, you will be alerted to slot and unslot a prismatic in dungeons",
+  PRISMATICWARNING_MENU_P_DUNGEONS = "Alert In Partial Dungeons",
+  PRISMATICWARNING_MENU_P_DUNGEONS_TT = "When selected, you will be alerted to slot and unslot a prismatic in dungeons where you use a prismatic for some, but not all, of the dungeon",
+  PRISMATICWARNING_MENU_ARENAS = "Alert in Arenas",
+  PRISMATICWARNING_MENU_ARENAS_TT = "When selected, you will be alerted to slot and unslot a prismatic in arenas",
+  PRISMATICWARNING_MENU_TRIALS = "Alert in Trials",
+  PRISMATICWARNING_MENU_TRIALS_TT = "When selected, you will be alerted to slot and unslot a prismatic in trials",
+  PRISMATICWARNING_MENU_MAGDD = "Alert if Magicka Damage Dealer",
+  PRISMATICWARNING_MENU_MAGDD_TT = "When selected, you will be alerted to slot and unslot a prismatic when your LFG role is set to a damage dealer and your maximum magicka is greater than your stamina",
+  PRISMATICWARNING_MENU_STAMDD = "Alert if Stamina Damage Dealer",
+  PRISMATICWARNING_MENU_STAMDD_TT = "When selected, you will be alerted to slot and unslot a prismatic when your LFG role is set to a damage dealer and your maximum stamina is greater than your magicka",
+  PRISMATICWARNING_MENU_TANK = "Alert if Tank",
+  PRISMATICWARNING_MENU_TANK_TT = "When selected, you will be alerted to slot and unslot a prismatic when your LFG role is set to a tank",
+  PRISMATICWARNING_MENU_HEAL = "Alert if Healer",
+  PRISMATICWARNING_MENU_HEAL_TT = "When selected, you will be alerted to slot and unslot a prismatic when your LFG role is set to a healer",
+  
+  PRISMATICWARNING_MENU_OTHER = "Other Settings",
+  PRISMATICWARNING_MENU_CHAT = "Alert to Chat",
+  PRISMATICWARNING_MENU_CHAT_TT = "When selected, you will be alerted to slot and unslot a prismatic in the active chat tab",
+  PRISMATICWARNING_MENU_RR = "Refresh Rate",
+  PRISMATICWARNING_MENU_RR_TT = "Changes how often (in milliseconds) the addon checks if you should slot a prismatic weapon",
+  PRISMATICWARNING_MENU_RR_WARN = "Lower numbers may affect performance and higher numbers may tell you to slot a prismatic too late",
+  PRISMATICWARNING_MENU_AUTO_SWAP = "Auto-Swap To",
+  PRISMATICWARNING_MENU_AUTO_SWAP_TT = 'The addon will attempt to automatically slot the prismatic weapon to the bar you choose; "Don\'t" will not attempt to auto-swap',
+  PRISMATICWARNING_MENU_AUTO_SWAP_WARN = "In order for auto-slotting to work, the prismatic weapon must be in your inventory",
+  PRISMATICWARNING_MENU_FRONT_BAR = "Front bar",
+  PRISMATICWARNING_MENU_BACK_BAR = "Back bar",
+  PRISMATICWARNING_MENU_DONT = "Don't",
+  PRISMATICWARNING_MENU_DEBUG = "Debug Alerts",
+  PRISMATICWARNING_MENU_DEBUG_TT = "When selected, debug alerts will be printed to chat",
+}
+
+for id, val in pairs(strings) do
+  ZO_CreateStringId(id, val)
+  SafeAddVersion(id, 1)
+end
