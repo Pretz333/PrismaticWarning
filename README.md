@@ -1,4 +1,4 @@
-# prismaticwarning
+# PrismaticWarning
 
 Prismatic Warning alerts when to slot a weapon with a prismatic onslaught enchant (henceforth called a “prismatic weapon”) in dungeons, trials, and arenas. 
 
