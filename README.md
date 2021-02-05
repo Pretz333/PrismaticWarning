@@ -10,18 +10,6 @@ It can be difficult to remember what bosses exactly count as a daedra or undead,
 
 <b>See AddOn Page at _______ for all information</b>
 
-<b>How to use this AddOn:</b>
-  <ul>
-  <li>Install this AddOn</li>
-  <li>Install LibAddonMenu-2.0 (if not already installed)</li>
-  <li>Once installed, there is a setting window under the AddOns section of settings that I recommend to take a look through. Some example settings are:
-    <ul>
-    <li>Hide on-screen alert in combat</li>
-    <li>Alert depending on your selected LFG role (separates stamina and magicka damage dealers)</li>
-    <li>Only alert when on veteran difficulty</li></li>
-    </ul>
-  </ul>
-
 <b>Known Bugs:</b>
 <ul>
 <li>Bloodroot Forge alerts before Earthgore Amalgam spawns in</li>
