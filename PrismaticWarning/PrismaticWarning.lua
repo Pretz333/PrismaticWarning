@@ -144,6 +144,9 @@ function PrismaticWarning.sorter()
       EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, PrismaticWarning.bossDeathCounter)
       EVENT_MANAGER:AddFilterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, REGISTER_FILTER_UNIT_TAG, "boss1")
     end
+    if PrismaticWarning.usesXPGain[zoneId] then
+      EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "XPGained", EVENT_EXPERIENCE_GAIN, PrismaticWarning.XPGained)
+    end
     EVENT_MANAGER:RegisterForUpdate(PrismaticWarning.name, PrismaticWarning.savedVariables.refreshRate, PrismaticWarning.zones[zoneId][5])
   end
 end
@@ -201,11 +204,14 @@ function PrismaticWarning.BHH()
   end
 end
 
-function PrismaticWarning.BRF() -- bugged, alerts before it should and after it should
+function PrismaticWarning.BRF()
   local _, y = PrismaticWarning.currentLocation()
-  if GetCurrentMapId() == 1309 and y > 55 and not DoesUnitExist('boss2') and not DoesUnitExist('boss3') then
+  if PrismaticWarning.specialKill then
     PrismaticWarning.alerter(true)
-    -- no unregister in case they kill boss2 and boss3, then wipe
+    PrismaticWarning.dungeonComplete()
+  elseif GetCurrentMapId() == 1309 and y > 63 then
+    PrismaticWarning.caresAboutXPGain = true
+    PrismaticWarning.alerter(false)
   else
     PrismaticWarning.alerter(false)
   end
@@ -520,8 +526,11 @@ PrismaticWarning.zones = {
 }
 
 PrismaticWarning.usesDeathCounting = {
-  [636] = true, --HRC
   [931] = true, --EH2
+}
+
+PrismaticWarning.usesXPGain = {
+  [973] = true, --BRF
 }
 
 -- Alert Controllers --
@@ -555,6 +564,12 @@ function PrismaticWarning.alerter(shouldSlot)
   end
 end
 
+function PrismaticWarning.XPGained(_, reason)
+  if PrismaticWarning.caresAboutXPGain and reason == PROGRESS_REASON_SCRIPTED_EVENT then
+    PrismaticWarning.specialKill = true
+  end
+end
+
 function PrismaticWarning.bossDeathCounter(_, _, isDead)
   if isDead then
     PrismaticWarning.counter = PrismaticWarning.counter + 1
@@ -578,8 +593,11 @@ end
 
 function PrismaticWarning.dungeonComplete()
   PrismaticWarning.debugAlert("Complete")
-  EVENT_MANAGER:UnregisterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED)
   EVENT_MANAGER:UnregisterForUpdate(PrismaticWarning.name)
+  EVENT_MANAGER:UnregisterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED)
+  EVENT_MANAGER:UnregisterForEvent(PrismaticWarning.name .. "XPGained", EVENT_EXPERIENCE_GAIN)
+  PrismaticWarning.caresAboutXPGain = false
+  PrismaticWarning.specialKill = false
   PrismaticWarning.counter = 0
   PrismaticWarning.lastCall = nil
   PrismaticWarning.alert = false
