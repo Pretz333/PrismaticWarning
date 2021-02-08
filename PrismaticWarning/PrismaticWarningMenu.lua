@@ -39,7 +39,7 @@ function PrismaticWarning.SettingsWindow()
       disabled = function() return PrismaticWarning.savedVariables.hideOnScreenAlert end,
       getFunc = function() return not PrismaticWarningWindow:IsHidden() end,
       setFunc = function(newValue)
-        PrismaticWarning.alertVisible(newValue, "slot now")
+        PrismaticWarning.alertVisible(newValue, GetString(PRISMATICWARNING_EQUIP_NOW))
       end,
     },
     [4] = {

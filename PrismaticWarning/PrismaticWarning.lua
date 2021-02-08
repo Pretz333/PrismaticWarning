@@ -54,9 +54,9 @@ function PrismaticWarning.OnAddOnLoaded(_, addonName)
   end
 
   if PrismaticWarning.isWeaponPrismatic(BAG_WORN, EQUIP_SLOT_BACKUP_MAIN) or PrismaticWarning.isWeaponPrismatic(BAG_WORN, EQUIP_SLOT_MAIN_HAND) then
-    PrismaticWarning.isPrismaticSlotted = true
+    PrismaticWarning.isPrismaticEquipped = true
   else
-    PrismaticWarning.isPrismaticSlotted = false
+    PrismaticWarning.isPrismaticEquipped = false
   end
 
   EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Role", EVENT_GROUP_MEMBER_ROLE_CHANGED, PrismaticWarning.roleCheck)
@@ -222,7 +222,7 @@ function PrismaticWarning.COA1()
   if x > 50 then
     PrismaticWarning.alerter(false)
     PrismaticWarning.dungeonComplete()
-  -- elseif x < 22 and y > 58 then -- Golor technically isn't an undead/daedra, but he dies so quickly it'll slow groups down if they deslot, then slot the prismatic
+  -- elseif x < 22 and y > 58 then -- Golor technically isn't an undead/daedra, but he dies so quickly it'll slow groups down if they unequip, then re-equip the prismatic
     -- PrismaticWarning.alerter(false)
   else
     PrismaticWarning.alerter(true)
@@ -235,7 +235,7 @@ function PrismaticWarning.COS() -- double check alerts
   
   if mapId == 1134 and ((y > 60 and x > 65) or (x < 34 and y < 65)) then
     PrismaticWarning.alerter(true)
-  elseif mapId == 1135 and y > 53 then -- Replace "y > 53" with "dranos is dead" if that's a thing without needed to register for combat events. Gives user more time to slot the weapon
+  elseif mapId == 1135 and y > 53 then -- Replace "y > 53" with "dranos is dead" if that's a thing without needed to register for combat events. Gives user more time to equip the weapon
     PrismaticWarning.alerter(true)
   elseif mapId == 1137 then
     PrismaticWarning.alerter(true)
@@ -343,7 +343,7 @@ end
 
 function PrismaticWarning.FullDungeon()
   PrismaticWarning.alerter(true)
-  if PrismaticWarning.isPrismaticSlotted then
+  if PrismaticWarning.isPrismaticEquipped then
     PrismaticWarning.dungeonComplete()
   end
 end
@@ -399,7 +399,7 @@ end
 
 function PrismaticWarning.NoneDungeon()
   PrismaticWarning.alerter(false)
-  if not PrismaticWarning.isPrismaticSlotted then
+  if not PrismaticWarning.isPrismaticEquipped then
     PrismaticWarning.dungeonComplete()
   end
 end
@@ -535,20 +535,20 @@ PrismaticWarning.usesXPGain = {
 
 -- Alert Controllers --
 
-function PrismaticWarning.alerter(shouldSlot)
+function PrismaticWarning.alerter(shouldEquip)
   -- Could add " and PrismaticWarning.savedVariables.hideOnScreenAlertInCombat". It adds an extra check but would pop up the alert if stuck in combat
   if IsUnitInCombat('player') then return end
   
-  if PrismaticWarning.lastCall ~= shouldSlot then
-    PrismaticWarning.lastCall = shouldSlot
+  if PrismaticWarning.lastCall ~= shouldEquip then
+    PrismaticWarning.lastCall = shouldEquip
     
     local whatToDo
     
-    if shouldSlot and not PrismaticWarning.isPrismaticSlotted then
-      whatToDo = GetString(PRISMATICWARNING_SLOT_NOW)
+    if shouldEquip and not PrismaticWarning.isPrismaticEquipped then
+      whatToDo = GetString(PRISMATICWARNING_EQUIP_NOW)
       PrismaticWarning.alert = true
-    elseif not shouldSlot and PrismaticWarning.isPrismaticSlotted then
-      whatToDo = GetString(PRISMATICWARNING_DESLOT_NOW)
+    elseif not shouldEquip and PrismaticWarning.isPrismaticEquipped then
+      whatToDo = GetString(PRISMATICWARNING_UNEQUIP_NOW)
       PrismaticWarning.alert = true
     else
       whatToDo = GetString(PRISMATICWARNING_KEEP_AS_IS)
@@ -559,7 +559,7 @@ function PrismaticWarning.alerter(shouldSlot)
     PrismaticWarning.addChatMessage(whatToDo)
     
     if PrismaticWarning.alert then
-      PrismaticWarning.slotter(shouldSlot)
+      PrismaticWarning.equipper(shouldEquip)
     end
   end
 end
@@ -606,14 +606,14 @@ end
 
 function PrismaticWarning.gearChanged(_, bag, slot) 
   if slot == EQUIP_SLOT_BACKUP_MAIN or slot == EQUIP_SLOT_MAIN_HAND then
-    PrismaticWarning.lastCall = nil -- to allow alerter to check if they slotted the right weapon
+    PrismaticWarning.lastCall = nil -- to allow alerter to check if they equipped the right weapon
     PrismaticWarning.alertVisible(false, "")
     PrismaticWarning.updateUnequippedItemId()
     
     if PrismaticWarning.isWeaponPrismatic(BAG_WORN, EQUIP_SLOT_BACKUP_MAIN) or PrismaticWarning.isWeaponPrismatic(BAG_WORN, EQUIP_SLOT_MAIN_HAND) then
-      PrismaticWarning.isPrismaticSlotted = true
+      PrismaticWarning.isPrismaticEquipped = true
     else
-      PrismaticWarning.isPrismaticSlotted = false
+      PrismaticWarning.isPrismaticEquipped = false
     end
   end
 end
@@ -628,7 +628,7 @@ function PrismaticWarning.isWeaponPrismatic(bag, slot)
   end
 end
 
-function PrismaticWarning.slotter(slotAPrismatic)
+function PrismaticWarning.equipper(equipAPrismatic)
 -- * CompareId64s(*id64* _firstId_, *id64* _secondId_)
 -- ** _Returns:_ *integer* _result_
 
@@ -647,14 +647,14 @@ function PrismaticWarning.slotter(slotAPrismatic)
     end
   end
   
-  if slotAPrismatic then
+  if equipAPrismatic then
     unequippedItemId = PrismaticWarning.prismaticItemId
   else
     unequippedItemId = PrismaticWarning.nonPrismaticItemId
   end
 
   if unequippedItemId == nil then
-    PrismaticWarning.debugAlert("Don't know what to slot")
+    PrismaticWarning.debugAlert("Don't know what to equip")
   else
     for slot = 0, numSlots do
       if GetItemWeaponType(BAG_BACKPACK, slot) ~= WEAPONTYPE_NONE and unequippedItemId == GetItemUniqueId(BAG_BACKPACK, slot) then
@@ -673,7 +673,7 @@ function PrismaticWarning.slotter(slotAPrismatic)
     EquipItem(BAG_BACKPACK, itemSlot, PrismaticWarning.equipSlot)
     PrismaticWarning.addChatMessage(GetString(PRISMATICWARNING_AUTO_SWAP_SUCCESS))
     
-    -- remove poisons if equipped on bar where the prismatic was/is slotted
+    -- remove poisons if equipped on bar where the prismatic was/is equipped
     if GetItemUniqueId(BAG_WORN, PrismaticWarning.poisonSlot) ~= nil then
       local emptySlot = FindFirstEmptySlotInBag(BAG_BACKPACK)
       if emptySlot == nil then
