@@ -140,12 +140,13 @@ function PrismaticWarning.sorter()
   end
 
   if shouldWatch then
-    if PrismaticWarning.usesDeathCounting[zoneId] then
-      EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, PrismaticWarning.bossDeathCounter)
-      EVENT_MANAGER:AddFilterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, REGISTER_FILTER_UNIT_TAG, "boss1")
-    end
-    if PrismaticWarning.usesXPGain[zoneId] then
-      EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "XPGained", EVENT_EXPERIENCE_GAIN, PrismaticWarning.XPGained)
+    if PrismaticWarning.usesSpecialEvent[zoneId] then
+      if PrismaticWarning.usesSpecialEvent[zoneId] == EVENT_UNIT_DEATH_STATE_CHANGED then
+        EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, PrismaticWarning.bossDeathCounter)
+        EVENT_MANAGER:AddFilterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, REGISTER_FILTER_UNIT_TAG, "boss1")
+      elseif PrismaticWarning.usesSpecialEvent[zoneId] == EVENT_EXPERIENCE_GAIN then
+        EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "XPGained", EVENT_EXPERIENCE_GAIN, PrismaticWarning.XPGained)
+      end
     end
     EVENT_MANAGER:RegisterForUpdate(PrismaticWarning.name, PrismaticWarning.savedVariables.refreshRate, PrismaticWarning.zones[zoneId][5])
   end
@@ -525,12 +526,9 @@ PrismaticWarning.zones = {
   [1227] = {true, false, false, false, PrismaticWarning.VH},
 }
 
-PrismaticWarning.usesDeathCounting = {
-  [931] = true, --EH2
-}
-
-PrismaticWarning.usesXPGain = {
-  [973] = true, --BRF
+PrismaticWarning.usesSpecialEvent = {
+  [931] = EVENT_UNIT_DEATH_STATE_CHANGED, --EH2
+  [973] = EVENT_EXPERIENCE_GAIN, --BRF
 }
 
 -- Alert Controllers --
