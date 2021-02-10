@@ -153,6 +153,7 @@ function PrismaticWarning.sorter()
       end
     end
     
+    PrismaticWarning.addChatMessage(GetString(PRISMATICWARNING_WATCHING))
     EVENT_MANAGER:RegisterForUpdate(PrismaticWarning.name, PrismaticWarning.savedVariables.refreshRate, PrismaticWarning.zones[zoneId][5])
   end
 end
@@ -602,6 +603,7 @@ end
 
 function PrismaticWarning.dungeonComplete()
   PrismaticWarning.debugAlert("Complete")
+  PrismaticWarning.addChatMessage(GetString(PRISMATICWARNING_DONE_WATCHING))
   EVENT_MANAGER:UnregisterForUpdate(PrismaticWarning.name)
   EVENT_MANAGER:UnregisterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED)
   EVENT_MANAGER:UnregisterForEvent(PrismaticWarning.name .. "XPGained", EVENT_EXPERIENCE_GAIN)

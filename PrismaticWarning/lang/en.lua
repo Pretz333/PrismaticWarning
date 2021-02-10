@@ -1,12 +1,16 @@
 local strings = {
+
   -- Alert --
-  
   PRISMATICWARNING_ALERT = "Prismatic",
   PRISMATICWARNING_EQUIP_NOW = "Equip one now",
   PRISMATICWARNING_KEEP_AS_IS = "Keep it as is",
   PRISMATICWARNING_UNEQUIP_NOW = "Unequip it now",
-  PRISMATICWARNING_AUTO_SWAP_SUCCESS = "Successfully Auto-Swapped weapons",
   PRISMATICWARNING_AUTO_SWAP_FAILED = "Failed to Auto-Swap weapons",
+  
+  -- Chat Only --
+  PRISMATICWARNING_AUTO_SWAP_SUCCESS = "Successfully Auto-Swapped weapons",
+  PRISMATICWARNING_WATCHING = "You will need a prismatic weapon, you should grab one now",
+  PRISMATICWARNING_DONE_WATCHING = "There are no more changes this dungeon",
   
   -- Menu --
   PRISMATICWARNING_MENU_OSA = "On-Screen Alert",
