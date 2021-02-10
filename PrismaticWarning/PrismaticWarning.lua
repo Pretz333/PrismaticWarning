@@ -557,10 +557,11 @@ function PrismaticWarning.alerter(shouldEquip)
       PrismaticWarning.alert = false
     end
     
-    PrismaticWarning.alertVisible(PrismaticWarning.alert, whatToDo)
     PrismaticWarning.addChatMessage(whatToDo)
     
-    if PrismaticWarning.alert then
+    if PrismaticWarning.savedVariables.autoSwapTo == GetString(PRISMATICWARNING_MENU_DONT) then
+      PrismaticWarning.alertVisible(PrismaticWarning.alert, whatToDo)
+    elseif PrismaticWarning.alert then
       PrismaticWarning.equipper(shouldEquip)
     end
   end
