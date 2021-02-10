@@ -2,12 +2,6 @@
 
 Prismatic Warning alerts when to slot a weapon with a prismatic onslaught enchant (henceforth called a “prismatic weapon”) in dungeons, trials, and arenas. 
 
-<b>Why use this AddOn?</b>
-
-Using a prismatic weapon enchant instead of the typical weapon damage or flame enchant significantly increases a player’s DPS, but can only be used on daedra and undead. 
-
-It can be difficult to remember what bosses exactly count as a daedra or undead, so this AddOn reminds you to slot a prismatic weapon when you approach one of the supported bosses.
-
 <b>See AddOn Page at _______ for all information</b>
 
 <b>Known Bugs not in Issues:</b>
