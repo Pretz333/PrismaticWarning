@@ -1,13 +1,17 @@
 local strings = {
+
   -- Alert --
-  
-  -- All strings in this category except PRISMATICWARNING_AUTO_SWAP_SUCCESS have a maximum length, please check they aren't too long
+  -- All strings in this category have a maximum length, please check they aren't too long
   PRISMATICWARNING_ALERT = "Prismatic", -- referring to a weapon with a glyph of prismatic onslaught
   PRISMATICWARNING_EQUIP_NOW = "Equip one now",
   PRISMATICWARNING_KEEP_AS_IS = "Keep it as is",
   PRISMATICWARNING_UNEQUIP_NOW = "Unequip it now",
-  PRISMATICWARNING_AUTO_SWAP_SUCCESS = "Successfully Auto-Swapped weapons",
   PRISMATICWARNING_AUTO_SWAP_FAILED = "Failed to Auto-Swap weapons",
+  
+  -- Chat Only --
+  PRISMATICWARNING_AUTO_SWAP_SUCCESS = "Successfully Auto-Swapped weapons",
+  PRISMATICWARNING_WATCHING = "You will need a prismatic weapon, you should grab one now",
+  PRISMATICWARNING_DONE_WATCHING = "There are no more changes this dungeon",
   
   -- Menu --
   PRISMATICWARNING_MENU_OSA = "On-Screen Alert",
@@ -24,7 +28,7 @@ local strings = {
   PRISMATICWARNING_MENU_FONT_SIZE = "Alert Font Size",
   PRISMATICWARNING_MENU_FONT_SIZE_TT = 'Font size for the word "Prismatic"',
   PRISMATICWARNING_MENU_INFO_FONT_SIZE = "Info Font Size",
-  PRISMATICWARNING_MENU_INFO_FONT_SIZE_TT = 'Font Size for the text under the word "Prismatic", typically "EQUIP ONE NOW" or "UNEQUIP IT NOW"',
+  PRISMATICWARNING_MENU_INFO_FONT_SIZE_TT = 'Font Size for the text under the word "Prismatic", typically "EQUIP NOW" or "UNEQUIP NOW"',
   PRISMATICWARNING_MENU_OUTLINE = "Outline",
   PRISMATICWARNING_MENU_OUTLINE_TT = "Font Outline to be used by the counter",
   PRISMATICWARNING_MENU_COLOR = "On-Screen Alert Color",
