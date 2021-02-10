@@ -641,8 +641,6 @@ function PrismaticWarning.equipper(equipAPrismatic)
 -- * CompareId64s(*id64* _firstId_, *id64* _secondId_)
 -- ** _Returns:_ *integer* _result_
 
-  if PrismaticWarning.savedVariables.autoSwapTo == GetString(PRISMATICWARNING_MENU_DONT) then return end
-
   local itemSlot, unequippedItemId
   local numSlots = GetBagSize(BAG_BACKPACK)
 
