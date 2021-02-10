@@ -146,8 +146,13 @@ function PrismaticWarning.sorter()
         EVENT_MANAGER:AddFilterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, REGISTER_FILTER_UNIT_TAG, "boss1")
       elseif PrismaticWarning.usesSpecialEvent[zoneId] == EVENT_EXPERIENCE_GAIN then
         EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "XPGained", EVENT_EXPERIENCE_GAIN, PrismaticWarning.XPGained)
+      elseif PrismaticWarning.usesSpecialEvent[zoneId] == EVENT_BOSSES_CHANGED then
+        EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "BossesChanged", EVENT_BOSSES_CHANGED, PrismaticWarning.BossesChanged)
+        EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, PrismaticWarning.bossDeathCounter)
+        EVENT_MANAGER:AddFilterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, REGISTER_FILTER_UNIT_TAG, "boss1")
       end
     end
+    
     EVENT_MANAGER:RegisterForUpdate(PrismaticWarning.name, PrismaticWarning.savedVariables.refreshRate, PrismaticWarning.zones[zoneId][5])
   end
 end
@@ -207,7 +212,7 @@ end
 
 function PrismaticWarning.BRF()
   local _, y = PrismaticWarning.currentLocation()
-  if PrismaticWarning.specialKill then
+  if PrismaticWarning.specialEventTrigger then
     PrismaticWarning.alerter(true)
     PrismaticWarning.dungeonComplete()
   elseif GetCurrentMapId() == 1309 and y > 63 then
@@ -297,7 +302,7 @@ function PrismaticWarning.DSA()
   end
 end
 
-function PrismaticWarning.EH2() -- uses safe kill counting
+function PrismaticWarning.EH2()
   local x, y = PrismaticWarning.currentLocation()
   if GetCurrentMapId() == 1146 or (PrismaticWarning.counter == 1 and x > 65 and y > 55 and y < 75) then
     PrismaticWarning.alerter(false)
@@ -349,21 +354,19 @@ function PrismaticWarning.FullDungeon()
   end
 end
 
-function PrismaticWarning.HRC() -- uses safe kill counting
-  -- assuming Ra Kotu spawns in only after the flame-shapers have been aggroed
+function PrismaticWarning.HRC()
+  local _, y = PrismaticWarning.currentLocation()
+  local mapId = GetCurrentMapId()
   
-  -- local _, y = PrismaticWarning.currentLocation()
-  -- local mapId = GetCurrentMapId()
-  -- if mapId == 616 or PrismaticWarning.counter > 0 or y < ## then
-    -- PrismaticWarning.alerter(false)
-       PrismaticWarning.dungeonComplete()
-  -- elseif mapId == (through first door) and y > ## then
-    -- if DoesUnitExist('boss1') then
-      -- PrismaticWarning.alerter(true)
-    -- end
-  -- else
-    -- PrismaticWarning.alerter(false)
-  -- end
+  if mapId == 616 or PrismaticWarning.counter > 0 then
+    PrismaticWarning.alerter(false)
+    PrismaticWarning.dungeonComplete()
+  elseif mapId == 615 and y > 52 and PrismaticWarning.specialEventTrigger then
+    PrismaticWarning.alerter(true)
+  else
+    -- PrismaticWarning.specialEventTrigger = false -- in case of early true forced, though I've yet to see that
+    PrismaticWarning.alerter(false)
+  end
 end
 
 function PrismaticWarning.KA()
@@ -527,6 +530,7 @@ PrismaticWarning.zones = {
 }
 
 PrismaticWarning.usesSpecialEvent = {
+  [636] = EVENT_BOSSES_CHANGED, --HRC
   [931] = EVENT_UNIT_DEATH_STATE_CHANGED, --EH2
   [973] = EVENT_EXPERIENCE_GAIN, --BRF
 }
@@ -564,7 +568,13 @@ end
 
 function PrismaticWarning.XPGained(_, reason)
   if PrismaticWarning.caresAboutXPGain and reason == PROGRESS_REASON_SCRIPTED_EVENT then
-    PrismaticWarning.specialKill = true
+    PrismaticWarning.specialEventTrigger = true
+  end
+end
+
+function PrismaticWarning.BossesChanged(_, forced)
+  if forced then
+    PrismaticWarning.specialEventTrigger = true
   end
 end
 
@@ -595,7 +605,7 @@ function PrismaticWarning.dungeonComplete()
   EVENT_MANAGER:UnregisterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED)
   EVENT_MANAGER:UnregisterForEvent(PrismaticWarning.name .. "XPGained", EVENT_EXPERIENCE_GAIN)
   PrismaticWarning.caresAboutXPGain = false
-  PrismaticWarning.specialKill = false
+  PrismaticWarning.specialEventTrigger = false
   PrismaticWarning.counter = 0
   PrismaticWarning.lastCall = nil
   PrismaticWarning.alert = false
