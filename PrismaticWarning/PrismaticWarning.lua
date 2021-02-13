@@ -240,7 +240,7 @@ function PrismaticWarning.COS()
   local x, y = PrismaticWarning.currentLocation()
   local mapId = GetCurrentMapId()
   
-  if mapId == 1134 and ((y > 66 and x > 76) or (x < 30 and y < 60)) then
+  if mapId == 1134 and ((y > 66 and x > 60) or (x < 47 and y < 62)) then
     PrismaticWarning.alerter(true)
   elseif mapId == 1135 and (y > 56 or x > 58) then
     PrismaticWarning.alerter(true)
@@ -305,9 +305,10 @@ end
 
 function PrismaticWarning.EH2()
   local x, y = PrismaticWarning.currentLocation()
-  if GetCurrentMapId() == 1146 or (PrismaticWarning.counter == 1 and x > 65 and y > 55 and y < 75) then
+  local mapId = GetCurrentMapId()
+  if mapId == 1146 or (PrismaticWarning.counter == 1 and x > 65 and y > 55 and y < 75) then
     PrismaticWarning.alerter(false)
-  elseif y < 33 and x < 55 then
+  elseif y < 33 and x < 55 or mapId == 1147 then
     PrismaticWarning.alerter(true)
     PrismaticWarning.dungeonComplete(true)
   else
@@ -332,7 +333,7 @@ function PrismaticWarning.FH()
   local x, y = PrismaticWarning.currentLocation()
   local mapId = GetCurrentMapId()
   if mapId == 1322 then
-    if x > 59 and y > 78 then
+    if x > 59 and y < 79 then
       PrismaticWarning.alerter(false)
       PrismaticWarning.dungeonComplete(true)
     else
@@ -449,7 +450,7 @@ function PrismaticWarning.UHG()
   
   if mapId == 1769 then
     PrismaticWarning.alerter(true)
-  elseif mapId == 1796 and y > 75 then
+  elseif (mapId == 1796 and y > 75) or mapId == 1767 then
     PrismaticWarning.alerter(false)
     PrismaticWarning.dungeonComplete(true)
   else
@@ -657,6 +658,9 @@ function PrismaticWarning.equipper(equipAPrismatic)
         break
       end
     end
+    if PrismaticWarning.prismaticItemId == nil then
+      PrismaticWarning.addChatMessage(GetString(PRISMATICWARNING_NO_PRISMATIC_IN_INV))
+    end
   end
   
   if equipAPrismatic then
@@ -677,8 +681,14 @@ function PrismaticWarning.equipper(equipAPrismatic)
   end
 
   if itemSlot == nil then
-    PrismaticWarning.addChatMessage(GetString(PRISMATICWARNING_AUTO_SWAP_FAILED))
-    PrismaticWarning.alertVisible(true, GetString(PRISMATICWARNING_AUTO_SWAP_FAILED))
+    local str = GetString(PRISMATICWARNING_AUTO_SWAP_FAILED)
+    if equipAPrismatic then
+      str = str .. string.lower(GetString(PRISMATICWARNING_EQUIP_NOW))
+    else
+      str = str .. string.lower(GetString(PRISMATICWARNING_UNEQUIP_NOW))
+    end
+    PrismaticWarning.addChatMessage(str)
+    PrismaticWarning.alertVisible(true, str)
   else
     PrismaticWarning.updateUnequippedItemId()
     
