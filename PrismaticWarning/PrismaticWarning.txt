@@ -22,10 +22,3 @@ PrismaticWarning.xml
 ;@PrincessZelda100, @ElSeano, and @doshu for testing with me
 ;@Kafeijao for the Light Attack Helper UI code, which this UI is based off of
 ;@code65536 for the ability to handle group requeues into the same dungeon
-
-;To figure out which boss is able to be aggro-ed
-; EVENT_BOSSES_CHANGED
-; EVENT_UNIT_CREATED
-; EVENT_UNIT_DEATH_STATE_CHANGED
-; EVENT_UNIT_DESTROYED
-; BRF 3 boss chest spawn?
