@@ -530,6 +530,8 @@ PrismaticWarning.zones = {
   [1197] = {false, false, true, false, PrismaticWarning.NoneDungeon}, -- Stone Garden
   [1201] = {false, false, false, true, PrismaticWarning.CT},
   [1227] = {true, false, false, false, PrismaticWarning.VH},
+  [1228] = {false, false, true, false, PrismaticWarning.NoneDungeon},
+  [1229] = {false, false, true, false, PrismaticWarning.FullDungeon},
 }
 
 PrismaticWarning.usesSpecialEvent = {
