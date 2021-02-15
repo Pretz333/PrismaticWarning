@@ -197,13 +197,14 @@ function PrismaticWarning.BC2()
 end
 
 function PrismaticWarning.BHH()  
-  -- If someone in group is doing quest, adds after roost mother all count (add " or (y < 30 and x < 55 and group member doing quest) to "y < 10")
+  -- If someone in group is doing quest, adds after roost mother all count (add " or (y < 30 and x < 55 and group member doing quest) to "mapId == 344")
   -- I'm currently ignoring that since I don't know how to tell if someone in group talked to Shifty Tom after the Atarus kill
   
   local _, y = PrismaticWarning.currentLocation()
-  if GetCurrentMapId() == 346 and y < 55 then
+  local mapId = GetCurrentMapId()
+  if (mapId == 346 and y < 55) or y < 8 then
     PrismaticWarning.alerter(true)
-  elseif y < 10 then
+  elseif mapId == 344 then
     PrismaticWarning.alerter(true)
     PrismaticWarning.dungeonComplete(true)
   else
@@ -240,7 +241,7 @@ function PrismaticWarning.COS()
   local x, y = PrismaticWarning.currentLocation()
   local mapId = GetCurrentMapId()
   
-  if mapId == 1134 and ((y > 66 and x > 60) or (x < 47 and y < 62)) then
+  if mapId == 1134 and ((y > 66 and x > 60) or (x < 33 and y < 62)) then
     PrismaticWarning.alerter(true)
   elseif mapId == 1135 and (y > 56 or x > 58) then
     PrismaticWarning.alerter(true)
@@ -333,7 +334,7 @@ function PrismaticWarning.FH()
   local x, y = PrismaticWarning.currentLocation()
   local mapId = GetCurrentMapId()
   if mapId == 1322 then
-    if x > 59 and y < 79 then
+    if x > 60 and y > 78 then
       PrismaticWarning.alerter(false)
       PrismaticWarning.dungeonComplete(true)
     else
@@ -558,11 +559,8 @@ function PrismaticWarning.alerter(shouldEquip)
       PrismaticWarning.alert = false
     end
     
-    if whatToDo ~= nil then
-      PrismaticWarning.addChatMessage(whatToDo)
-    end
-    
     if PrismaticWarning.savedVariables.autoSwapTo == GetString(PRISMATICWARNING_MENU_DONT) then
+      PrismaticWarning.addChatMessage(whatToDo)
       PrismaticWarning.alertVisible(PrismaticWarning.alert, whatToDo)
     elseif PrismaticWarning.alert then
       PrismaticWarning.equipper(shouldEquip)
@@ -603,8 +601,8 @@ function PrismaticWarning.currentLocation()
   return x * 100, y * 100
 end
 
-function PrismaticWarning.dungeonComplete(dungeonEnd)
-  if dungeonEnd then
+function PrismaticWarning.dungeonComplete(endOfDungeon)
+  if endOfDungeon then
     PrismaticWarning.debugAlert("Complete")
     PrismaticWarning.addChatMessage(GetString(PRISMATICWARNING_DONE_WATCHING))
   end
