@@ -547,7 +547,7 @@ PrismaticWarning.usesSpecialEvent = {
 
 function PrismaticWarning.alerter(shouldEquip)
   -- Could add " and PrismaticWarning.savedVariables.hideOnScreenAlertInCombat". It adds an extra check but would pop up the alert if stuck in combat
-  if IsUnitInCombat('player') then return end
+  if PrismaticWarning.combatState then return end
   
   if PrismaticWarning.lastCall ~= shouldEquip then
     PrismaticWarning.lastCall = shouldEquip
