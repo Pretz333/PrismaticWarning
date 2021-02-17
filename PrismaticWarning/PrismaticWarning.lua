@@ -638,8 +638,8 @@ end
 
 function PrismaticWarning.updateCombatState(_, inCombat)
   PrismaticWarning.combatState = inCombat
-  if PrismaticWarning.savedVariables.hideOnScreenAlertInCombat then
-    PrismaticWarning.updateVisibilityOnCombatChange(inCombat)
+  if PrismaticWarning.savedVariables.hideOnScreenAlertInCombat and PrismaticWarning.alert then
+    PrismaticWarningWindow:SetHidden(inCombat)
   end
 end
 
@@ -751,8 +751,8 @@ function PrismaticWarning.InitializeUI()
   PrismaticWarningWindowInfo:SetColor(unpack(PrismaticWarning.savedVariables.fontColor))
   PrismaticWarningWindowLabelBG:SetMouseEnabled(not PrismaticWarning.savedVariables.isLocked)
 
-  if PrismaticWarning.savedVariables.hideOnScreenAlertInCombat then
-    PrismaticWarning.updateVisibilityOnCombatChange(_, IsUnitInCombat('player'))
+  if PrismaticWarning.savedVariables.hideOnScreenAlertInCombat and PrismaticWarning.alert then
+    PrismaticWarningWindow:SetHidden(PrismaticWarning.combatState)
   end
   
   PrismaticWarning.alertVisible(false, "")
@@ -770,12 +770,6 @@ function PrismaticWarning.updateFont()
   else
     PrismaticWarningWindowLabel:SetFont(PrismaticWarning.savedVariables.fontName .. "|" .. PrismaticWarning.savedVariables.fontSize .. "|" ..  PrismaticWarning.savedVariables.fontOutline)
     PrismaticWarningWindowInfo:SetFont(PrismaticWarning.savedVariables.fontName .. "|" .. PrismaticWarning.savedVariables.infoFontSize .. "|" ..  PrismaticWarning.savedVariables.fontOutline)
-  end
-end
-
-function PrismaticWarning.updateVisibilityOnCombatChange(inCombat)
-  if PrismaticWarning.alert then
-    PrismaticWarningWindow:SetHidden(inCombat)
   end
 end
 
