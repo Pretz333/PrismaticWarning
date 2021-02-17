@@ -40,6 +40,7 @@ function PrismaticWarning.OnAddOnLoaded(_, addonName)
   PrismaticWarning.SettingsWindow()
   PrismaticWarning.role = GetSelectedLFGRole()
   PrismaticWarning.settingsBypass = false
+  PrismaticWarning.combatState = IsUnitInCombat('player')
 
   if not PrismaticWarning.savedVariables.hideOnScreenAlert then
     PrismaticWarning.InitializeUI()
@@ -66,6 +67,7 @@ function PrismaticWarning.OnAddOnLoaded(_, addonName)
   EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Gear", EVENT_INVENTORY_SINGLE_SLOT_UPDATE, PrismaticWarning.gearChanged)
   EVENT_MANAGER:AddFilterForEvent(PrismaticWarning.name .. "Gear", EVENT_INVENTORY_SINGLE_SLOT_UPDATE, REGISTER_FILTER_BAG_ID, BAG_WORN)
   EVENT_MANAGER:AddFilterForEvent(PrismaticWarning.name .. "Gear", EVENT_INVENTORY_SINGLE_SLOT_UPDATE, REGISTER_FILTER_INVENTORY_UPDATE_REASON, INVENTORY_UPDATE_REASON_DEFAULT)
+  EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Combat", EVENT_PLAYER_COMBAT_STATE, PrismaticWarning.updateCombatState)
 end
 
 function PrismaticWarning.OnActivityFinderStatusUpdate(_, result) -- Thank you @code65536 (stolen from dungeon timer)
@@ -89,7 +91,6 @@ end
 
 function PrismaticWarning.sorter()
   local zoneId = GetZoneId(GetUnitZoneIndex('player'))
-  local shouldWatch, zoneIsArena, zoneIsTrial, zoneIsPartialDungeon, zoneIsDungeon
 
   if PrismaticWarning.zoneId ~= zoneId then
     PrismaticWarning.zoneId = zoneId
@@ -100,6 +101,8 @@ function PrismaticWarning.sorter()
   else
     return -- already checked this zone and settings haven't changed
   end
+  
+  local shouldWatch, zoneIsArena, zoneIsTrial, zoneIsPartialDungeon, zoneIsDungeon
 
   if PrismaticWarning.zones[zoneId] ~= nil then
     if PrismaticWarning.zones[zoneId][4] then
@@ -467,8 +470,8 @@ function PrismaticWarning.VH()
   elseif mapId == 1844 then
     PrismaticWarning.alerter(false)
   elseif mapId == 1846 then
-    PrismaticWarning.dungeonComplete(true)
     PrismaticWarning.alerter(false)
+    PrismaticWarning.dungeonComplete(true)
   end
 end
 
@@ -530,8 +533,8 @@ PrismaticWarning.zones = {
   [1197] = {false, false, true, false, PrismaticWarning.NoneDungeon}, -- Stone Garden
   [1201] = {false, false, false, true, PrismaticWarning.CT},
   [1227] = {true, false, false, false, PrismaticWarning.VH},
-  [1228] = {false, false, true, false, PrismaticWarning.NoneDungeon},
-  [1229] = {false, false, true, false, PrismaticWarning.FullDungeon},
+  [1228] = {false, false, true, false, PrismaticWarning.NoneDungeon}, -- BDV
+  [1229] = {false, false, true, false, PrismaticWarning.FullDungeon}, -- Cauldron
 }
 
 PrismaticWarning.usesSpecialEvent = {
@@ -630,6 +633,13 @@ function PrismaticWarning.gearChanged(_, bag, slot)
     else
       PrismaticWarning.isPrismaticEquipped = false
     end
+  end
+end
+
+function PrismaticWarning.updateCombatState(_, inCombat)
+  PrismaticWarning.combatState = inCombat
+  if PrismaticWarning.savedVariables.hideOnScreenAlertInCombat then
+    PrismaticWarning.updateVisibilityOnCombatChange(inCombat)
   end
 end
 
@@ -743,7 +753,6 @@ function PrismaticWarning.InitializeUI()
 
   if PrismaticWarning.savedVariables.hideOnScreenAlertInCombat then
     PrismaticWarning.updateVisibilityOnCombatChange(_, IsUnitInCombat('player'))
-    EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Combat", EVENT_PLAYER_COMBAT_STATE, PrismaticWarning.updateVisibilityOnCombatChange)
   end
   
   PrismaticWarning.alertVisible(false, "")
@@ -764,7 +773,7 @@ function PrismaticWarning.updateFont()
   end
 end
 
-function PrismaticWarning.updateVisibilityOnCombatChange(_, inCombat)
+function PrismaticWarning.updateVisibilityOnCombatChange(inCombat)
   if PrismaticWarning.alert then
     PrismaticWarningWindow:SetHidden(inCombat)
   end
