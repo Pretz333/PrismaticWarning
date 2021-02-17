@@ -26,8 +26,6 @@ function PrismaticWarning.SettingsWindow()
         PrismaticWarning.savedVariables.hideOnScreenAlert = newValue
         if not newValue then    
           PrismaticWarning.InitializeUI()
-        else
-          EVENT_MANAGER:UnregisterForEvent("PrismaticWarningCombat", EVENT_PLAYER_COMBAT_STATE)
         end
       end,
     },
@@ -51,11 +49,6 @@ function PrismaticWarning.SettingsWindow()
       getFunc = function() return PrismaticWarning.savedVariables.hideOnScreenAlertInCombat end,
       setFunc = function(newValue)
         PrismaticWarning.savedVariables.hideOnScreenAlertInCombat = newValue
-        if newValue then    
-          EVENT_MANAGER:RegisterForEvent("PrismaticWarningCombat", EVENT_PLAYER_COMBAT_STATE, PrismaticWarning.updateVisibilityOnCombatChange)
-        else
-          EVENT_MANAGER:UnregisterForEvent("PrismaticWarningCombat", EVENT_PLAYER_COMBAT_STATE)
-        end
       end,
     },
     [5] = {
