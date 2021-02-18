@@ -171,7 +171,7 @@ function PrismaticWarning.AA() -- alerts slightly late, as in not on pads to fou
     PrismaticWarning.alerter(true)
   elseif mapId == 641 or mapId == 640 then
     PrismaticWarning.alerter(false)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, false)
   else
     PrismaticWarning.alerter(false)
   end
@@ -181,7 +181,7 @@ function PrismaticWarning.BC1()
   local x, y = PrismaticWarning.currentLocation()
   if x < 38 and y > 32 then
     PrismaticWarning.alerter(false)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, false)
   else
     PrismaticWarning.alerter(true)
   end
@@ -193,7 +193,7 @@ function PrismaticWarning.BC2()
     PrismaticWarning.alerter(false)
   elseif x < 43 and y < 20 then
     PrismaticWarning.alerter(true)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, true)
   else
     PrismaticWarning.alerter(true)
   end
@@ -209,7 +209,7 @@ function PrismaticWarning.BHH()
     PrismaticWarning.alerter(true)
   elseif mapId == 344 then
     PrismaticWarning.alerter(true)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, true)
   else
     PrismaticWarning.alerter(false)
   end
@@ -219,7 +219,7 @@ function PrismaticWarning.BRF()
   local _, y = PrismaticWarning.currentLocation()
   if PrismaticWarning.specialEventTrigger then
     PrismaticWarning.alerter(true)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, true)
   elseif GetCurrentMapId() == 1309 and y > 63 then
     PrismaticWarning.caresAboutXPGain = true
     PrismaticWarning.alerter(false)
@@ -232,7 +232,7 @@ function PrismaticWarning.COA1()
   local x, y = PrismaticWarning.currentLocation()
   if x > 50 then
     PrismaticWarning.alerter(false)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, false)
   -- elseif x < 22 and y > 58 then -- Golor technically isn't an undead/daedra, but he dies so quickly it'll slow groups down if they unequip, then re-equip the prismatic
     -- PrismaticWarning.alerter(false)
   else
@@ -250,7 +250,7 @@ function PrismaticWarning.COS()
     PrismaticWarning.alerter(true)
   elseif mapId == 1136 or mapId == 1137 then
     PrismaticWarning.alerter(true)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, true)
   else
     PrismaticWarning.alerter(false)
   end
@@ -262,7 +262,7 @@ function PrismaticWarning.CT()
   
   if mapId == 1823 and x < 38 or y < 38 then
     PrismaticWarning.alerter(true)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, true)
   else
     PrismaticWarning.alerter(false)
   end
@@ -291,7 +291,7 @@ function PrismaticWarning.DOM()
     end
   else
     PrismaticWarning.alerter(false)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, false)
   end
 end
 
@@ -301,7 +301,7 @@ function PrismaticWarning.DSA()
     PrismaticWarning.alerter(true)
   elseif mapId == 692 then
     PrismaticWarning.alerter(false)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, false)
   else
     PrismaticWarning.alerter(false)
   end
@@ -314,7 +314,7 @@ function PrismaticWarning.EH2()
     PrismaticWarning.alerter(false)
   elseif y < 33 and x < 55 or mapId == 1147 then
     PrismaticWarning.alerter(true)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, true)
   else
     PrismaticWarning.alerter(true)
   end
@@ -325,7 +325,7 @@ function PrismaticWarning.FG2()
   
   if GetCurrentMapId() == 1151 or x < 34 or (y > 46 and y < 50 and x < 39) then
     PrismaticWarning.alerter(false)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, false)
   elseif y > 38 and y < 50 and x < 45 then
     PrismaticWarning.alerter(true)
   else
@@ -339,7 +339,7 @@ function PrismaticWarning.FH()
   if mapId == 1322 then
     if x > 60 and y > 78 then
       PrismaticWarning.alerter(false)
-      PrismaticWarning.dungeonComplete(true)
+      PrismaticWarning.dungeonComplete(true, false)
     else
       PrismaticWarning.alerter(true)
     end
@@ -347,7 +347,7 @@ function PrismaticWarning.FH()
     PrismaticWarning.alerter(true)
   elseif mapId == 1323 then
     PrismaticWarning.alerter(false)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, false)
   else
     PrismaticWarning.alerter(false)
   end
@@ -366,7 +366,7 @@ function PrismaticWarning.HRC()
   
   if mapId == 616 or PrismaticWarning.counter > 0 then
     PrismaticWarning.alerter(false)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, false)
   elseif mapId == 615 and y > 52 and PrismaticWarning.specialEventTrigger then
     PrismaticWarning.alerter(true)
   else
@@ -378,7 +378,7 @@ end
 function PrismaticWarning.KA()
   if GetCurrentMapId() == 1806 then -- 1807 is the 2nd floor, 1808 is the bottom floor
     PrismaticWarning.alerter(true)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, true)
   else
     PrismaticWarning.alerter(false)
   end
@@ -390,7 +390,7 @@ function PrismaticWarning.MA()
     PrismaticWarning.alerter(true)
   elseif mapId == 986 then
     PrismaticWarning.alerter(true)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, true)
   else
     PrismaticWarning.alerter(false)
   end
@@ -401,7 +401,7 @@ function PrismaticWarning.MOL()
   
   if GetCurrentMapId()== 1000 and x < 75 then
     PrismaticWarning.alerter(true)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, true)
   else
     PrismaticWarning.alerter(false)
   end
@@ -418,7 +418,7 @@ function PrismaticWarning.Spindle1()
   local _, y = PrismaticWarning.currentLocation()
   if y > 68 then
     PrismaticWarning.alerter(true)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, true)
   else
     PrismaticWarning.alerter(false)
   end
@@ -428,7 +428,7 @@ function PrismaticWarning.Spindle2()
   local x, y = PrismaticWarning.currentLocation()
   if x > 70 or y > 55 then
     PrismaticWarning.alerter(true)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, true)
   elseif x > 52 and y < 33 then
     PrismaticWarning.alerter(false)
   else
@@ -442,7 +442,7 @@ function PrismaticWarning.Tempest()
     PrismaticWarning.alerter(true)
   elseif GetCurrentMapId() == 597 then
     PrismaticWarning.alerter(false)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, false)
   else
     PrismaticWarning.alerter(false)
   end
@@ -456,7 +456,7 @@ function PrismaticWarning.UHG()
     PrismaticWarning.alerter(true)
   elseif (mapId == 1796 and y > 75) or mapId == 1767 then
     PrismaticWarning.alerter(false)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, false)
   else
     PrismaticWarning.alerter(false)
   end
@@ -471,7 +471,7 @@ function PrismaticWarning.VH()
     PrismaticWarning.alerter(false)
   elseif mapId == 1846 then
     PrismaticWarning.alerter(false)
-    PrismaticWarning.dungeonComplete(true)
+    PrismaticWarning.dungeonComplete(true, false)
   end
 end
 
@@ -606,11 +606,32 @@ function PrismaticWarning.currentLocation()
   return x * 100, y * 100
 end
 
-function PrismaticWarning.dungeonComplete(endOfDungeon)
+function PrismaticWarning.dungeonComplete(endOfDungeon, shouldSlot)
   if endOfDungeon then
+    if PrismaticWarning.combatState then
+      -- copied from alerter to solve issue #24 in GitHub
+      local whatToDo
+      
+      if shouldEquip and not PrismaticWarning.isPrismaticEquipped then
+        whatToDo = GetString(PRISMATICWARNING_EQUIP_NOW)
+        PrismaticWarning.alert = true
+      elseif not shouldEquip and PrismaticWarning.isPrismaticEquipped then
+        whatToDo = GetString(PRISMATICWARNING_UNEQUIP_NOW)
+        PrismaticWarning.alert = true
+      else
+        PrismaticWarning.alert = false
+      end
+      
+      PrismaticWarning.addChatMessage(whatToDo)
+      PrismaticWarning.alertVisible(false, whatToDo)
+    end
     PrismaticWarning.debugAlert("Complete")
     PrismaticWarning.addChatMessage(GetString(PRISMATICWARNING_DONE_WATCHING))
+  else
+    PrismaticWarning.alert = false
+    PrismaticWarning.alertVisible(false, "")
   end
+  
   EVENT_MANAGER:UnregisterForUpdate(PrismaticWarning.name)
   EVENT_MANAGER:UnregisterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED)
   EVENT_MANAGER:UnregisterForEvent(PrismaticWarning.name .. "XPGained", EVENT_EXPERIENCE_GAIN)
@@ -618,8 +639,6 @@ function PrismaticWarning.dungeonComplete(endOfDungeon)
   PrismaticWarning.specialEventTrigger = false
   PrismaticWarning.counter = 0
   PrismaticWarning.lastCall = nil
-  PrismaticWarning.alert = false
-  PrismaticWarning.alertVisible(false, "")
 end
 
 function PrismaticWarning.gearChanged(_, bag, slot) 
