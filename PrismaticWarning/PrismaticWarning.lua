@@ -606,7 +606,7 @@ function PrismaticWarning.currentLocation()
   return x * 100, y * 100
 end
 
-function PrismaticWarning.dungeonComplete(endOfDungeon, shouldSlot)
+function PrismaticWarning.dungeonComplete(endOfDungeon, shouldEquip)
   if endOfDungeon then
     if PrismaticWarning.combatState then
       -- copied from alerter to solve issue #24 in GitHub
