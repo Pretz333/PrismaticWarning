@@ -622,8 +622,10 @@ function PrismaticWarning.dungeonComplete(endOfDungeon, shouldSlot)
         PrismaticWarning.alert = false
       end
       
-      PrismaticWarning.addChatMessage(whatToDo)
-      PrismaticWarning.alertVisible(false, whatToDo)
+      if PrismaticWarning.alert then
+        PrismaticWarning.addChatMessage(whatToDo)
+        PrismaticWarning.alertVisible(false, whatToDo)
+      end
     end
     PrismaticWarning.debugAlert("Complete")
     PrismaticWarning.addChatMessage(GetString(PRISMATICWARNING_DONE_WATCHING))
