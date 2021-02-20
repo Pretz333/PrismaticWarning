@@ -647,6 +647,7 @@ function PrismaticWarning.gearChanged(_, bag, slot)
   if slot == EQUIP_SLOT_BACKUP_MAIN or slot == EQUIP_SLOT_MAIN_HAND then
     PrismaticWarning.lastCall = nil -- to allow alerter to check if they equipped the right weapon
     PrismaticWarning.alertVisible(false, "")
+    PrismaticWarning.alert = false
     PrismaticWarning.updateUnequippedItemId()
     
     if PrismaticWarning.isWeaponPrismatic(BAG_WORN, EQUIP_SLOT_BACKUP_MAIN) or PrismaticWarning.isWeaponPrismatic(BAG_WORN, EQUIP_SLOT_MAIN_HAND) then
