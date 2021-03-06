@@ -737,6 +737,8 @@ function PrismaticWarning.equipper(equipAPrismatic)
       end
     end
   end
+  
+  PrismaticWarning.lastCall = nil -- issue #22 in GitHub
 
 end
 
