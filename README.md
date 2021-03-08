@@ -4,11 +4,6 @@ Prismatic Warning alerts when to slot a weapon with a prismatic onslaught enchan
 
 <b>See AddOn Page at _______ for all information</b>
 
-<b>Known Bugs not in Issues:</b>
-<ul>
-<li>If you are in a partial-prismatic dungeon using the map to look at a zone you aren’t in and you cross one of the slot/deslot boundaries, you will not be alerted to slot/deslot the prismatic weapon.</li>
-</ul>
-
 <b>To Be Added:</b>
   <ul>
 <li>Translations of menu and alerts. Everything on my end should be done, if you can translate, please:<ul>
