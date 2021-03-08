@@ -89,78 +89,6 @@ function PrismaticWarning.roleCheck(_, unitTag, role)
   end
 end
 
-function PrismaticWarning.sorter()
-  local zoneId = GetZoneId(GetUnitZoneIndex('player'))
-
-  if PrismaticWarning.zoneId ~= zoneId then
-    PrismaticWarning.zoneId = zoneId
-    PrismaticWarning.dungeonComplete(false)
-  elseif PrismaticWarning.settingsBypass then
-    PrismaticWarning.settingsBypass = false
-    PrismaticWarning.dungeonComplete(false) -- in case shouldWatch is now false
-  else
-    return -- already checked this zone and settings haven't changed
-  end
-  
-  local shouldWatch, zoneIsArena, zoneIsTrial, zoneIsPartialDungeon, zoneIsDungeon
-
-  if PrismaticWarning.zones[zoneId] ~= nil then
-    if PrismaticWarning.zones[zoneId][4] then
-      zoneIsPartialDungeon = true
-      zoneIsDungeon = true
-    elseif PrismaticWarning.zones[zoneId][3] then
-      zoneIsDungeon = true
-    elseif PrismaticWarning.zones[zoneId][2] then
-      zoneIsTrial = true
-    elseif PrismaticWarning.zones[zoneId][1] then
-      zoneIsArena = true
-    end
-  end
-
-  if zoneIsDungeon or zoneIsTrial or zoneIsArena then
-    if PrismaticWarning.savedVariables.alertOnlyOnVet and (GetCurrentZoneDungeonDifficulty() ~= DUNGEON_DIFFICULTY_VETERAN) then
-      PrismaticWarning.debugAlert("Doesn't want alerts on normal difficulty")
-    elseif (PrismaticWarning.role == LFG_ROLE_TANK) and (not PrismaticWarning.savedVariables.alertIfTank) then
-      PrismaticWarning.debugAlert("Doesn't want alerts on a tank")
-    elseif (PrismaticWarning.role == LFG_ROLE_HEAL) and (not PrismaticWarning.savedVariables.alertIfHeal) then
-      PrismaticWarning.debugAlert("Doesn't want alerts on a healer")
-    elseif (PrismaticWarning.role == LFG_ROLE_DPS) and (not PrismaticWarning.savedVariables.alertIfMagDD) and (GetPlayerStat(STAT_MAGICKA_MAX, STAT_BONUS_OPTION_APPLY_BONUS) > GetPlayerStat(STAT_STAMINA_MAX, STAT_BONUS_OPTION_APPLY_BONUS)) then
-      PrismaticWarning.debugAlert("Doesn't want alerts on a MagDPS")
-    elseif (PrismaticWarning.role == LFG_ROLE_DPS) and (not PrismaticWarning.savedVariables.alertIfStamDD) and (GetPlayerStat(STAT_STAMINA_MAX, STAT_BONUS_OPTION_APPLY_BONUS) > GetPlayerStat(STAT_MAGICKA_MAX, STAT_BONUS_OPTION_APPLY_BONUS)) then
-      PrismaticWarning.debugAlert("Doesn't want alerts on a StamDPS")
-    elseif zoneIsTrial and (not PrismaticWarning.savedVariables.alertInTrials) then
-      PrismaticWarning.debugAlert("Doesn't want alerts in a trial")
-    elseif zoneIsArena and (not PrismaticWarning.savedVariables.alertInArenas) then
-      PrismaticWarning.debugAlert("Doesn't want alerts in an arena")
-    elseif zoneIsDungeon and (not PrismaticWarning.savedVariables.alertInDungeons) then
-      PrismaticWarning.debugAlert("Doesn't want alerts in dungeons")
-    elseif zoneIsPartialDungeon and (not PrismaticWarning.savedVariables.alertInPartialDungeons) then
-      PrismaticWarning.debugAlert("Doesn't want alerts in a partial dungeon, converted to a nungeon")
-      EVENT_MANAGER:RegisterForUpdate(PrismaticWarning.name, PrismaticWarning.savedVariables.refreshRate, PrismaticWarning.NoneDungeon)
-    else
-      shouldWatch = true
-    end
-  end
-
-  if shouldWatch then
-    if PrismaticWarning.usesSpecialEvent[zoneId] then
-      if PrismaticWarning.usesSpecialEvent[zoneId] == EVENT_UNIT_DEATH_STATE_CHANGED then
-        EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, PrismaticWarning.bossDeathCounter)
-        EVENT_MANAGER:AddFilterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, REGISTER_FILTER_UNIT_TAG, "boss1")
-      elseif PrismaticWarning.usesSpecialEvent[zoneId] == EVENT_EXPERIENCE_GAIN then
-        EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "XPGained", EVENT_EXPERIENCE_GAIN, PrismaticWarning.XPGained)
-      elseif PrismaticWarning.usesSpecialEvent[zoneId] == EVENT_BOSSES_CHANGED then
-        EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "BossesChanged", EVENT_BOSSES_CHANGED, PrismaticWarning.BossesChanged)
-        EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, PrismaticWarning.bossDeathCounter)
-        EVENT_MANAGER:AddFilterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, REGISTER_FILTER_UNIT_TAG, "boss1")
-      end
-    end
-    
-    PrismaticWarning.addChatMessage(GetString(PRISMATICWARNING_WATCHING))
-    EVENT_MANAGER:RegisterForUpdate(PrismaticWarning.name, PrismaticWarning.savedVariables.refreshRate, PrismaticWarning.zones[zoneId][5])
-  end
-end
-
 -- Dungeon Watchers --
 
 function PrismaticWarning.AA() -- alerts slightly late, as in not on pads to foundatin atro
@@ -542,6 +470,82 @@ PrismaticWarning.usesSpecialEvent = {
   [931] = EVENT_UNIT_DEATH_STATE_CHANGED, --EH2
   [973] = EVENT_EXPERIENCE_GAIN, --BRF
 }
+
+-- Sorter --
+
+function PrismaticWarning.sorter()
+  local zoneId = GetZoneId(GetUnitZoneIndex('player'))
+
+  if PrismaticWarning.zoneId ~= zoneId then
+    PrismaticWarning.zoneId = zoneId
+    PrismaticWarning.dungeonComplete(false)
+  elseif PrismaticWarning.settingsBypass then
+    PrismaticWarning.settingsBypass = false
+    PrismaticWarning.dungeonComplete(false) -- in case shouldWatch is now false
+  else
+    return -- already checked this zone and settings haven't changed
+  end
+  
+  local shouldWatch, zoneIsArena, zoneIsTrial, zoneIsPartialDungeon, zoneIsDungeon
+
+  if PrismaticWarning.zones[zoneId] ~= nil then
+    if PrismaticWarning.zones[zoneId][4] then
+      zoneIsPartialDungeon = true
+      zoneIsDungeon = true
+    elseif PrismaticWarning.zones[zoneId][3] then
+      zoneIsDungeon = true
+    elseif PrismaticWarning.zones[zoneId][2] then
+      zoneIsTrial = true
+    elseif PrismaticWarning.zones[zoneId][1] then
+      zoneIsArena = true
+    end
+  end
+
+  if zoneIsDungeon or zoneIsTrial or zoneIsArena then
+    if PrismaticWarning.savedVariables.alertOnlyOnVet and (GetCurrentZoneDungeonDifficulty() ~= DUNGEON_DIFFICULTY_VETERAN) then
+      PrismaticWarning.debugAlert("Doesn't want alerts on normal difficulty")
+    elseif (PrismaticWarning.role == LFG_ROLE_TANK) and (not PrismaticWarning.savedVariables.alertIfTank) then
+      PrismaticWarning.debugAlert("Doesn't want alerts on a tank")
+    elseif (PrismaticWarning.role == LFG_ROLE_HEAL) and (not PrismaticWarning.savedVariables.alertIfHeal) then
+      PrismaticWarning.debugAlert("Doesn't want alerts on a healer")
+    elseif (PrismaticWarning.role == LFG_ROLE_DPS) and (not PrismaticWarning.savedVariables.alertIfMagDD) and (GetPlayerStat(STAT_MAGICKA_MAX, STAT_BONUS_OPTION_APPLY_BONUS) > GetPlayerStat(STAT_STAMINA_MAX, STAT_BONUS_OPTION_APPLY_BONUS)) then
+      PrismaticWarning.debugAlert("Doesn't want alerts on a MagDPS")
+    elseif (PrismaticWarning.role == LFG_ROLE_DPS) and (not PrismaticWarning.savedVariables.alertIfStamDD) and (GetPlayerStat(STAT_STAMINA_MAX, STAT_BONUS_OPTION_APPLY_BONUS) > GetPlayerStat(STAT_MAGICKA_MAX, STAT_BONUS_OPTION_APPLY_BONUS)) then
+      PrismaticWarning.debugAlert("Doesn't want alerts on a StamDPS")
+    elseif zoneIsTrial and (not PrismaticWarning.savedVariables.alertInTrials) then
+      PrismaticWarning.debugAlert("Doesn't want alerts in a trial")
+    elseif zoneIsArena and (not PrismaticWarning.savedVariables.alertInArenas) then
+      PrismaticWarning.debugAlert("Doesn't want alerts in an arena")
+    elseif zoneIsDungeon and (not PrismaticWarning.savedVariables.alertInDungeons) then
+      PrismaticWarning.debugAlert("Doesn't want alerts in dungeons")
+    elseif zoneIsPartialDungeon and (not PrismaticWarning.savedVariables.alertInPartialDungeons) then
+      PrismaticWarning.debugAlert("Doesn't want alerts in a partial dungeon, converted to a nungeon")
+      EVENT_MANAGER:RegisterForUpdate(PrismaticWarning.name, PrismaticWarning.savedVariables.refreshRate, PrismaticWarning.NoneDungeon)
+    else
+      shouldWatch = true
+    end
+  end
+
+  if shouldWatch then
+    if PrismaticWarning.usesSpecialEvent[zoneId] then
+      if PrismaticWarning.usesSpecialEvent[zoneId] == EVENT_UNIT_DEATH_STATE_CHANGED then
+        EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, PrismaticWarning.bossDeathCounter)
+        EVENT_MANAGER:AddFilterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, REGISTER_FILTER_UNIT_TAG, "boss1")
+      elseif PrismaticWarning.usesSpecialEvent[zoneId] == EVENT_EXPERIENCE_GAIN then
+        EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "XPGained", EVENT_EXPERIENCE_GAIN, PrismaticWarning.XPGained)
+      elseif PrismaticWarning.usesSpecialEvent[zoneId] == EVENT_BOSSES_CHANGED then
+        EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "BossesChanged", EVENT_BOSSES_CHANGED, PrismaticWarning.BossesChanged)
+        EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, PrismaticWarning.bossDeathCounter)
+        EVENT_MANAGER:AddFilterForEvent(PrismaticWarning.name .. "Death", EVENT_UNIT_DEATH_STATE_CHANGED, REGISTER_FILTER_UNIT_TAG, "boss1")
+      end
+    end
+    
+    if PrismaticWarning.zones[zoneId][5] ~= PrismaticWarning.NoneDungeon then
+      PrismaticWarning.addChatMessage(GetString(PRISMATICWARNING_WATCHING))
+    end
+    EVENT_MANAGER:RegisterForUpdate(PrismaticWarning.name, PrismaticWarning.savedVariables.refreshRate, PrismaticWarning.zones[zoneId][5])
+  end
+end
 
 -- Alert Controllers --
 
