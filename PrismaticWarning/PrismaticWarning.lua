@@ -3,7 +3,7 @@
 PrismaticWarning = PrismaticWarning or {
   name = "PrismaticWarning",
   author = "@Pretz333 (NA)",
-  version = "0.0.1",
+  version = "4.5.3",
   variableVersion = 1,
   defaults = {
     left = GuiRoot:GetWidth()/2,
@@ -91,7 +91,7 @@ end
 
 -- Dungeon Watchers --
 
-function PrismaticWarning.AA() -- alerts slightly late, as in not on pads to foundatin atro
+function PrismaticWarning.AA() -- alerts slightly late, as in not on pads to foundation atro
   local _, y = PrismaticWarning.currentLocation()
   local mapId = GetCurrentMapId()
   
