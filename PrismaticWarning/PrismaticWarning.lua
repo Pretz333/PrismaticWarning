@@ -91,11 +91,11 @@ end
 
 -- Dungeon Watchers --
 
-function PrismaticWarning.AA() -- alerts slightly late, as in not on pads to foundation atro
+function PrismaticWarning.AA()
   local _, y = PrismaticWarning.currentLocation()
   local mapId = GetCurrentMapId()
   
-  if mapId == 642 and ((y > 25 and y < 43) or (y > 52 and y < 75)) then
+  if mapId == 642 and ((y > 25 and y < 43) or (y > 48 and y < 75)) then
     PrismaticWarning.alerter(true)
   elseif mapId == 641 or mapId == 640 then
     PrismaticWarning.alerter(false)
