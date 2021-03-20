@@ -23,8 +23,9 @@ function PrismaticWarning.SettingsWindow()
       default = PrismaticWarning.defaults.hideOnScreenAlert,
       getFunc = function() return PrismaticWarning.savedVariables.hideOnScreenAlert end,
       setFunc = function(newValue)
+        PrismaticWarning.alertVisible(false, "") -- Fixes Issues #38, #39
         PrismaticWarning.savedVariables.hideOnScreenAlert = newValue
-        if not newValue then    
+        if not newValue then
           PrismaticWarning.InitializeUI()
         end
       end,
