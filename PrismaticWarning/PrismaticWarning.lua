@@ -643,12 +643,14 @@ function PrismaticWarning.dungeonComplete(endOfDungeon, shouldEquip)
   EVENT_MANAGER:UnregisterForEvent(PrismaticWarning.name .. "XPGained", EVENT_EXPERIENCE_GAIN)
   PrismaticWarning.caresAboutXPGain = false
   PrismaticWarning.specialEventTrigger = false
+  PrismaticWarning.findFail = false
   PrismaticWarning.counter = 0
   PrismaticWarning.lastCall = nil
 end
 
 function PrismaticWarning.gearChanged(_, bag, slot) 
   if slot == EQUIP_SLOT_BACKUP_MAIN or slot == EQUIP_SLOT_MAIN_HAND then
+    PrismaticWarning.findFail = false
     PrismaticWarning.lastCall = nil -- to allow alerter to check if they equipped the right weapon
     PrismaticWarning.alertVisible(false, "")
     PrismaticWarning.alert = false
@@ -696,6 +698,7 @@ function PrismaticWarning.equipper(equipAPrismatic)
     end
     if PrismaticWarning.prismaticItemId == nil then
       PrismaticWarning.addChatMessage(GetString(PRISMATICWARNING_NO_PRISMATIC_IN_INV))
+      PrismaticWarning.findFail = true
     end
   end
   
@@ -742,7 +745,9 @@ function PrismaticWarning.equipper(equipAPrismatic)
     end
   end
   
-  PrismaticWarning.lastCall = nil -- issue #22 in GitHub
+  if not PrismaticWarning.findFail then -- issue #40 in GitHub
+    PrismaticWarning.lastCall = nil -- issue #22 in GitHub
+  end
 
 end
 
