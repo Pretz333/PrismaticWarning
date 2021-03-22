@@ -247,10 +247,22 @@ function PrismaticWarning.SettingsWindow()
       end,
     },
     [21] = {
+      type = "checkbox",
+      name = GetString(PRISMATICWARNING_MENU_UNDER_FIFTY),
+      tooltip = GetString(PRISMATICWARNING_MENU_UNDER_FIFTY_TT),
+      default = PrismaticWarning.defaults.alertIfUnderFifty,
+      getFunc = function() return PrismaticWarning.savedVariables.alertIfUnderFifty end,
+      setFunc = function(newValue)
+        PrismaticWarning.savedVariables.alertIfUnderFifty = newValue
+        PrismaticWarning.settingsBypass = true
+        PrismaticWarning.sorter()
+      end,
+    },
+    [22] = {
       type = "header",
       name = GetString(PRISMATICWARNING_MENU_OTHER),
     },
-    [22] = {
+    [23] = {
       type = "checkbox",
       name = GetString(PRISMATICWARNING_MENU_CHAT),
       tooltip = GetString(PRISMATICWARNING_MENU_CHAT_TT),
@@ -260,7 +272,7 @@ function PrismaticWarning.SettingsWindow()
         PrismaticWarning.savedVariables.alertToChat = newValue
       end,
     },
-    [23] = {
+    [24] = {
       type = "slider",
       name = GetString(PRISMATICWARNING_MENU_RR),
       tooltip = GetString(PRISMATICWARNING_MENU_RR_TT),
@@ -275,7 +287,7 @@ function PrismaticWarning.SettingsWindow()
         PrismaticWarning.sorter()
       end,
     },
-    [24] = {
+    [25] = {
       type = "dropdown",
       name = GetString(PRISMATICWARNING_MENU_AUTO_SWAP),
       tooltip = GetString(PRISMATICWARNING_MENU_AUTO_SWAP_TT),
@@ -295,7 +307,7 @@ function PrismaticWarning.SettingsWindow()
         end
       end,
     },
-    [25] = {
+    [26] = {
       type = "checkbox",
       name = GetString(PRISMATICWARNING_MENU_DEBUG),
       tooltip = GetString(PRISMATICWARNING_MENU_DEBUG_TT),

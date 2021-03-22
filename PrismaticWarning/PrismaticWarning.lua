@@ -27,6 +27,7 @@ PrismaticWarning = PrismaticWarning or {
     alertIfHeal= false,
     alertIfMagDD = true,
     alertIfStamDD = true,
+    alertIfUnderFifty = false,
     autoSwapTo = GetString(PRISMATICWARNING_MENU_DONT),
     debugAlerts = false,
   },
@@ -512,6 +513,8 @@ function PrismaticWarning.sorter()
       PrismaticWarning.debugAlert("Doesn't want alerts on a MagDPS")
     elseif (PrismaticWarning.role == LFG_ROLE_DPS) and (not PrismaticWarning.savedVariables.alertIfStamDD) and (GetPlayerStat(STAT_STAMINA_MAX, STAT_BONUS_OPTION_APPLY_BONUS) > GetPlayerStat(STAT_MAGICKA_MAX, STAT_BONUS_OPTION_APPLY_BONUS)) then
       PrismaticWarning.debugAlert("Doesn't want alerts on a StamDPS")
+    elseif GetUnitLevel('player') < 50 and not PrismaticWarning.savedVariables.alertIfUnderFifty then
+      PrismaticWarning.debugAlert("Doesn't want alerts on an under 50 character")
     elseif zoneIsTrial and (not PrismaticWarning.savedVariables.alertInTrials) then
       PrismaticWarning.debugAlert("Doesn't want alerts in a trial")
     elseif zoneIsArena and (not PrismaticWarning.savedVariables.alertInArenas) then
