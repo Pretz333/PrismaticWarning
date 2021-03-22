@@ -52,7 +52,7 @@ local strings = {
   PRISMATICWARNING_MENU_TANK_TT = "When selected, you will be alerted to equip and unequip a prismatic when your LFG role is set to a tank",
   PRISMATICWARNING_MENU_HEAL = "Alert if Healer",
   PRISMATICWARNING_MENU_HEAL_TT = "When selected, you will be alerted to equip and unequip a prismatic when your LFG role is set to a healer",
-  PRISMATICWARNING_MENU_UNDER_FIFTY = "Alert if Under 50",
+  PRISMATICWARNING_MENU_UNDER_FIFTY = "Alert if Under Level 50",
   PRISMATICWARNING_MENU_UNDER_FIFTY_TT = "When selected, you will be alerted to equip and unequip a prismatic if on characters under level 50",
   
   PRISMATICWARNING_MENU_OTHER = "Other Settings",
