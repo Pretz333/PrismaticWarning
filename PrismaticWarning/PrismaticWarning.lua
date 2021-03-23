@@ -760,7 +760,7 @@ function PrismaticWarning.debugAlert(message)
 end
 
 function PrismaticWarning.addChatMessage(message)
-  if PrismaticWarning.savedVariables.alertToChat then
+  if PrismaticWarning.savedVariables.alertToChat and message ~= nil then
     CHAT_SYSTEM:AddMessage("[Prismatic Warning] " .. message)
   end
 end
