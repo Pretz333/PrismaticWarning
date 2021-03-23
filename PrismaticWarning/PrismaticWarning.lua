@@ -29,6 +29,8 @@ PrismaticWarning = PrismaticWarning or {
     alertIfStamDD = true,
     alertIfUnderFifty = false,
     autoSwapTo = GetString(PRISMATICWARNING_MENU_DONT),
+    equipSlot = nil,
+    poisonSlot = nil,
     debugAlerts = false,
   },
 }
@@ -44,14 +46,6 @@ function PrismaticWarning.OnAddOnLoaded(_, addonName)
 
   if not PrismaticWarning.savedVariables.hideOnScreenAlert then
     PrismaticWarning.InitializeUI()
-  end
-
-  if PrismaticWarning.savedVariables.autoSwapTo == GetString(PRISMATICWARNING_MENU_FRONT_BAR) then
-    PrismaticWarning.equipSlot = EQUIP_SLOT_MAIN_HAND
-    PrismaticWarning.poisonSlot = EQUIP_SLOT_POISON
-  elseif PrismaticWarning.savedVariables.autoSwapTo == GetString(PRISMATICWARNING_MENU_BACK_BAR) then
-    PrismaticWarning.equipSlot = EQUIP_SLOT_BACKUP_MAIN
-    PrismaticWarning.poisonSlot = EQUIP_SLOT_BACKUP_POISON
   end
 
   if PrismaticWarning.isWeaponPrismatic(BAG_WORN, EQUIP_SLOT_BACKUP_MAIN) or PrismaticWarning.isWeaponPrismatic(BAG_WORN, EQUIP_SLOT_MAIN_HAND) then
@@ -562,7 +556,7 @@ function PrismaticWarning.alerter(shouldEquip)
       PrismaticWarning.alert = false
     end
     
-    if PrismaticWarning.savedVariables.autoSwapTo == GetString(PRISMATICWARNING_MENU_DONT) then
+    if PrismaticWarning.savedVariables.equipSlot == nil then
       PrismaticWarning.addChatMessage(whatToDo)
       PrismaticWarning.alertVisible(PrismaticWarning.alert, whatToDo)
     elseif PrismaticWarning.alert then
@@ -725,16 +719,16 @@ function PrismaticWarning.equipper(equipAPrismatic)
   else
     PrismaticWarning.updateUnequippedItemId()
     
-    EquipItem(BAG_BACKPACK, itemSlot, PrismaticWarning.equipSlot)
+    EquipItem(BAG_BACKPACK, itemSlot, PrismaticWarning.savedVariables.equipSlot)
     PrismaticWarning.addChatMessage(GetString(PRISMATICWARNING_AUTO_SWAP_SUCCESS))
     
     -- remove poisons if equipped on bar where the prismatic was/is equipped
-    if GetItemUniqueId(BAG_WORN, PrismaticWarning.poisonSlot) ~= nil then
+    if GetItemUniqueId(BAG_WORN, PrismaticWarning.savedVariables.poisonSlot) ~= nil then
       local emptySlot = FindFirstEmptySlotInBag(BAG_BACKPACK)
       if emptySlot == nil then
         PrismaticWarning.debugAlert("No space in inventory for unequipping poisons")
       else
-        CallSecureProtected("RequestMoveItem", BAG_WORN, PrismaticWarning.poisonSlot, BAG_BACKPACK, emptySlot, 200)
+        CallSecureProtected("RequestMoveItem", BAG_WORN, PrismaticWarning.savedVariables.poisonSlot, BAG_BACKPACK, emptySlot, 200)
       end
     end
   end
@@ -746,10 +740,10 @@ function PrismaticWarning.equipper(equipAPrismatic)
 end
 
 function PrismaticWarning.updateUnequippedItemId()
-  if PrismaticWarning.isWeaponPrismatic(BAG_WORN, PrismaticWarning.equipSlot) then
-    PrismaticWarning.prismaticItemId = GetItemUniqueId(BAG_WORN, PrismaticWarning.equipSlot)
+  if PrismaticWarning.isWeaponPrismatic(BAG_WORN, PrismaticWarning.savedVariables.equipSlot) then -- this doesn't throw an error if equipSlot is nil
+    PrismaticWarning.prismaticItemId = GetItemUniqueId(BAG_WORN, PrismaticWarning.savedVariables.equipSlot)
   else
-    PrismaticWarning.nonPrismaticItemId = GetItemUniqueId(BAG_WORN, PrismaticWarning.equipSlot)
+    PrismaticWarning.nonPrismaticItemId = GetItemUniqueId(BAG_WORN, PrismaticWarning.savedVariables.equipSlot)
   end
 end
 
@@ -760,7 +754,7 @@ function PrismaticWarning.debugAlert(message)
 end
 
 function PrismaticWarning.addChatMessage(message)
-  if PrismaticWarning.savedVariables.alertToChat then
+  if PrismaticWarning.savedVariables.alertToChat and message ~= nil then
     CHAT_SYSTEM:AddMessage("[Prismatic Warning] " .. message)
   end
 end
