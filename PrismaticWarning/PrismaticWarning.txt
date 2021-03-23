@@ -6,7 +6,7 @@
 ## Title: Prismatic Warning
 ## Description: Alerts when to use a weapon with a glyph of prismatic onslaught in dungeons, trials, and arenas
 ## Author: @Pretz333 (NA)
-## Version: 4.5.3
+## Version: 4.5.4
 ## APIVersion: 100034
 ## SavedVariables: PrismaticWarningSavedVariables
 ## DependsOn: LibAddonMenu-2.0
@@ -17,8 +17,3 @@ lang/$(language).lua
 PrismaticWarning.lua
 PrismaticWarningMenu.lua
 PrismaticWarning.xml
-
-;Credits:
-;@PrincessZelda100, @ElSeano, and @doshu for testing with me
-;@Kafeijao for the Light Attack Helper UI code, which this UI is based off of
-;@code65536 for the ability to handle group requeues into the same dungeon
