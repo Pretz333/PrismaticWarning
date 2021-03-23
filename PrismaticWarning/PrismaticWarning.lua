@@ -619,7 +619,6 @@ function PrismaticWarning.dungeonComplete(endOfDungeon, shouldEquip)
         PrismaticWarning.alertVisible(not PrismaticWarning.savedVariables.hideOnScreenAlertInCombat, whatToDo)
       end
     end
-    PrismaticWarning.debugAlert("Complete")
     PrismaticWarning.addChatMessage(GetString(PRISMATICWARNING_DONE_WATCHING))
   else
     PrismaticWarning.alert = false
