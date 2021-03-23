@@ -3,7 +3,7 @@
 PrismaticWarning = PrismaticWarning or {
   name = "PrismaticWarning",
   author = "@Pretz333 (NA)",
-  version = "4.5.3",
+  version = "4.5.4",
   variableVersion = 1,
   defaults = {
     left = GuiRoot:GetWidth()/2,
@@ -39,7 +39,6 @@ function PrismaticWarning.OnAddOnLoaded(_, addonName)
   EVENT_MANAGER:UnregisterForEvent(PrismaticWarning.name, EVENT_ADD_ON_LOADED)
   PrismaticWarning.savedVariables = ZO_SavedVars:NewAccountWide("PrismaticWarningSavedVariables", PrismaticWarning.variableVersion, nil, PrismaticWarning.defaults, nil, "$InstallationWide")
   PrismaticWarning.SettingsWindow()
-  PrismaticWarning.role = GetSelectedLFGRole()
   PrismaticWarning.settingsBypass = false
   PrismaticWarning.combatState = IsUnitInCombat('player')
 
@@ -61,7 +60,6 @@ function PrismaticWarning.OnAddOnLoaded(_, addonName)
     PrismaticWarning.isPrismaticEquipped = false
   end
 
-  EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Role", EVENT_GROUP_MEMBER_ROLE_CHANGED, PrismaticWarning.roleCheck)
   EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Kick", EVENT_INSTANCE_KICK_TIME_UPDATE, PrismaticWarning.kicking)
   EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Load", EVENT_PLAYER_ACTIVATED, PrismaticWarning.sorter)
   EVENT_MANAGER:RegisterForEvent(PrismaticWarning.name .. "Reset", EVENT_ACTIVITY_FINDER_STATUS_UPDATE, PrismaticWarning.OnActivityFinderStatusUpdate)
@@ -80,14 +78,6 @@ end
 
 function PrismaticWarning.kicking()
   PrismaticWarning.zoneId = nil -- to fix the case where the player ports directly from the old instance into the new instance
-end
-
-function PrismaticWarning.roleCheck(_, unitTag, role)
-  if AreUnitsEqual(unitTag, 'player') then
-    PrismaticWarning.role = role
-    PrismaticWarning.settingsBypass = true
-    PrismaticWarning.sorter()
-  end
 end
 
 -- Dungeon Watchers --
@@ -503,15 +493,16 @@ function PrismaticWarning.sorter()
   end
 
   if zoneIsDungeon or zoneIsTrial or zoneIsArena then
+    local role = GetSelectedLFGRole()
     if PrismaticWarning.savedVariables.alertOnlyOnVet and (GetCurrentZoneDungeonDifficulty() ~= DUNGEON_DIFFICULTY_VETERAN) then
       PrismaticWarning.debugAlert("Doesn't want alerts on normal difficulty")
-    elseif (PrismaticWarning.role == LFG_ROLE_TANK) and (not PrismaticWarning.savedVariables.alertIfTank) then
+    elseif (role == LFG_ROLE_TANK) and (not PrismaticWarning.savedVariables.alertIfTank) then
       PrismaticWarning.debugAlert("Doesn't want alerts on a tank")
-    elseif (PrismaticWarning.role == LFG_ROLE_HEAL) and (not PrismaticWarning.savedVariables.alertIfHeal) then
+    elseif (role == LFG_ROLE_HEAL) and (not PrismaticWarning.savedVariables.alertIfHeal) then
       PrismaticWarning.debugAlert("Doesn't want alerts on a healer")
-    elseif (PrismaticWarning.role == LFG_ROLE_DPS) and (not PrismaticWarning.savedVariables.alertIfMagDD) and (GetPlayerStat(STAT_MAGICKA_MAX, STAT_BONUS_OPTION_APPLY_BONUS) > GetPlayerStat(STAT_STAMINA_MAX, STAT_BONUS_OPTION_APPLY_BONUS)) then
+    elseif (role == LFG_ROLE_DPS) and (not PrismaticWarning.savedVariables.alertIfMagDD) and (GetPlayerStat(STAT_MAGICKA_MAX, STAT_BONUS_OPTION_APPLY_BONUS) > GetPlayerStat(STAT_STAMINA_MAX, STAT_BONUS_OPTION_APPLY_BONUS)) then
       PrismaticWarning.debugAlert("Doesn't want alerts on a MagDPS")
-    elseif (PrismaticWarning.role == LFG_ROLE_DPS) and (not PrismaticWarning.savedVariables.alertIfStamDD) and (GetPlayerStat(STAT_STAMINA_MAX, STAT_BONUS_OPTION_APPLY_BONUS) > GetPlayerStat(STAT_MAGICKA_MAX, STAT_BONUS_OPTION_APPLY_BONUS)) then
+    elseif (role == LFG_ROLE_DPS) and (not PrismaticWarning.savedVariables.alertIfStamDD) and (GetPlayerStat(STAT_STAMINA_MAX, STAT_BONUS_OPTION_APPLY_BONUS) > GetPlayerStat(STAT_MAGICKA_MAX, STAT_BONUS_OPTION_APPLY_BONUS)) then
       PrismaticWarning.debugAlert("Doesn't want alerts on a StamDPS")
     elseif GetUnitLevel('player') < 50 and not PrismaticWarning.savedVariables.alertIfUnderFifty then
       PrismaticWarning.debugAlert("Doesn't want alerts on an under 50 character")
