@@ -297,14 +297,17 @@ function PrismaticWarning.SettingsWindow()
       getFunc = function() return PrismaticWarning.savedVariables.autoSwapTo end,
       setFunc = function(newValue)
         PrismaticWarning.savedVariables.autoSwapTo = newValue
-        PrismaticWarning.lastCall = nil
         if newValue == GetString(PRISMATICWARNING_MENU_FRONT_BAR) then
-          PrismaticWarning.equipSlot = EQUIP_SLOT_MAIN_HAND
-          PrismaticWarning.poisonSlot = EQUIP_SLOT_POISON
+          PrismaticWarning.savedVariables.equipSlot = EQUIP_SLOT_MAIN_HAND
+          PrismaticWarning.savedVariables.poisonSlot = EQUIP_SLOT_POISON
         elseif newValue == GetString(PRISMATICWARNING_MENU_BACK_BAR) then
-          PrismaticWarning.equipSlot = EQUIP_SLOT_BACKUP_MAIN
-          PrismaticWarning.poisonSlot = EQUIP_SLOT_BACKUP_POISON
+          PrismaticWarning.savedVariables.equipSlot = EQUIP_SLOT_BACKUP_MAIN
+          PrismaticWarning.savedVariables.poisonSlot = EQUIP_SLOT_BACKUP_POISON
+        elseif newValue == GetString(PRISMATICWARNING_MENU_DONT) then
+          PrismaticWarning.savedVariables.equipSlot = nil
+          PrismaticWarning.savedVariables.poisonSlot = nil
         end
+        PrismaticWarning.lastCall = nil
       end,
     },
     [26] = {
