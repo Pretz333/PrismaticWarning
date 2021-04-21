@@ -554,6 +554,7 @@ function PrismaticWarning.alerter(shouldEquip)
       PrismaticWarning.alert = true
     else
       PrismaticWarning.alert = false
+      --PrismaticWarning.findFail = false -- Issue #49
     end
     
     if PrismaticWarning.savedVariables.equipSlot == nil then
@@ -689,6 +690,8 @@ function PrismaticWarning.equipper(equipAPrismatic)
     end
   end
   
+  -- unequippedItemId = if equipAPrismatic then PrismaticWarning.prismaticItemId else PrismaticWarning.nonPrismaticItemId
+  -- unequippedItemId = if equipAPrismatic then PrismaticWarning.prismaticItemId else PrismaticWarning.nonPrismaticItemId end
   if equipAPrismatic then
     unequippedItemId = PrismaticWarning.prismaticItemId
   else
@@ -718,7 +721,11 @@ function PrismaticWarning.equipper(equipAPrismatic)
   else
     PrismaticWarning.updateUnequippedItemId()
     
-    EquipItem(BAG_BACKPACK, itemSlot, PrismaticWarning.savedVariables.equipSlot)
+    if GetAPIVersion >= 100035 then -- Delete this when PTS goes live
+      RequestEquipItem(BAG_BACKPACK, itemSlot, BAG_WORN, PrismaticWarning.savedVariables.equipSlot)
+    else
+      EquipItem(BAG_BACKPACK, itemSlot, PrismaticWarning.savedVariables.equipSlot)
+    end
     PrismaticWarning.addChatMessage(GetString(PRISMATICWARNING_AUTO_SWAP_SUCCESS))
     
     -- remove poisons if equipped on bar where the prismatic was/is equipped
