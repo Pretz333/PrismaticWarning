@@ -721,7 +721,7 @@ function PrismaticWarning.equipper(equipAPrismatic)
   else
     PrismaticWarning.updateUnequippedItemId()
     
-    if GetAPIVersion >= 100035 then -- Delete this when PTS goes live
+    if GetAPIVersion() >= 100035 then -- Delete this when PTS goes live
       RequestEquipItem(BAG_BACKPACK, itemSlot, BAG_WORN, PrismaticWarning.savedVariables.equipSlot)
     else
       EquipItem(BAG_BACKPACK, itemSlot, PrismaticWarning.savedVariables.equipSlot)
