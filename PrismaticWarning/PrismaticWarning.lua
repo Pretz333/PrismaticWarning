@@ -3,7 +3,7 @@
 PrismaticWarning = PrismaticWarning or {
   name = "PrismaticWarning",
   author = "@Pretz333 (NA)",
-  version = "4.5.4",
+  version = "4.5.5",
   variableVersion = 1,
   defaults = {
     left = GuiRoot:GetWidth()/2,
@@ -327,6 +327,18 @@ function PrismaticWarning.NoneDungeon()
   end
 end
 
+function PrismaticWarning.RG()
+  local _, y = PrismaticWarning.currentLocation()
+  local mapId = GetCurrentMapId()
+  
+  if (mapId == 2004 and y > 55) or mapId == 2005 then -- y = 51 is the door behind 1st boss, somewhere around 68 is the furthest edge of the entrance to second
+    PrismaticWarning.alerter(true)
+    PrismaticWarning.dungeonComplete(true, true)
+  else
+    PrismaticWarning.alerter(false)
+  end
+end
+
 function PrismaticWarning.Spindle1()
   local _, y = PrismaticWarning.currentLocation()
   if y > 68 then
@@ -448,6 +460,7 @@ PrismaticWarning.zones = {
   [1227] = {true, false, false, false, PrismaticWarning.VH},
   [1228] = {false, false, true, false, PrismaticWarning.NoneDungeon}, -- BDV
   [1229] = {false, false, true, false, PrismaticWarning.FullDungeon}, -- Cauldron
+  [1263] = {false, true, false, false, PrismaticWarning.RG},
 }
 
 PrismaticWarning.usesSpecialEvent = {
@@ -554,7 +567,7 @@ function PrismaticWarning.alerter(shouldEquip)
       PrismaticWarning.alert = true
     else
       PrismaticWarning.alert = false
-      --PrismaticWarning.findFail = false -- Issue #49
+      -- PrismaticWarning.findFail = false -- Issue #49?
     end
     
     if PrismaticWarning.savedVariables.equipSlot == nil then
@@ -690,13 +703,8 @@ function PrismaticWarning.equipper(equipAPrismatic)
     end
   end
   
-  -- unequippedItemId = if equipAPrismatic then PrismaticWarning.prismaticItemId else PrismaticWarning.nonPrismaticItemId
-  -- unequippedItemId = if equipAPrismatic then PrismaticWarning.prismaticItemId else PrismaticWarning.nonPrismaticItemId end
-  if equipAPrismatic then
-    unequippedItemId = PrismaticWarning.prismaticItemId
-  else
-    unequippedItemId = PrismaticWarning.nonPrismaticItemId
-  end
+  -- Set unequippedItemId to the correct item id using this nightmare
+  unequippedItemId = equipAPrismatic and PrismaticWarning.prismaticItemId or PrismaticWarning.nonPrismaticItemId
 
   if unequippedItemId == nil then
     PrismaticWarning.debugAlert("Don't know what to equip")
@@ -740,7 +748,7 @@ function PrismaticWarning.equipper(equipAPrismatic)
   end
   
   if not PrismaticWarning.findFail then -- issue #40 in GitHub
-    PrismaticWarning.lastCall = nil -- issue #22 in GitHub
+    PrismaticWarning.lastCall = nil -- allow the alerter to ensure the weapon was swapped
   end
 
 end

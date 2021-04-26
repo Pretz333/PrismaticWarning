@@ -6,8 +6,8 @@
 ## Title: Prismatic Warning
 ## Description: Alerts when to use a weapon with a glyph of prismatic onslaught in dungeons, trials, and arenas
 ## Author: @Pretz333 (NA)
-## Version: 4.5.4
-## APIVersion: 100034
+## Version: 4.5.5
+## APIVersion: 100034 100035
 ## SavedVariables: PrismaticWarningSavedVariables
 ## DependsOn: LibAddonMenu-2.0
 
